@@ -85,7 +85,11 @@ git clone https://github.com/Shubhf/SARVAM-.git
 cd SARVAM-
 pip install -e .
 ```
-
+## Project Structure
+SARVAM-/
+├── SARVAM_AI.ipynb # Core implementation 
+├── SARVAM_AI_improved.ipynb # More improved version (testing edge cases)
+└── README.md
 ## Technical Architecture
 1.Pattern Parser
 
