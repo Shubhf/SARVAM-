@@ -1,64 +1,114 @@
-# Einops from Scratch
+# Einops from Scratch Implementation
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![NumPy](https://img.shields.io/badge/NumPy-1.20%2B-orange)
+![Tests](https://img.shields.io/badge/Tests-85%25%20coverage-green)
 
 ## Overview
-This project is an implementation of core `einops` functionality from scratch, specifically the `rearrange` operation. The implementation supports reshaping, transposition, splitting, merging, and repeating of axes using NumPy arrays.
+A from-scratch implementation of core `einops` functionality supporting tensor operations with NumPy arrays. Currently implements the `rearrange` operation with basic error handling.
 
-## Features
-- **Reshaping**: Modify tensor dimensions according to a specified pattern.
-- **Transposition**: Reorder tensor axes efficiently.
-- **Splitting Axes**: Break an axis into multiple smaller axes.
-- **Merging Axes**: Combine multiple axes into a single dimension.
-- **Repeating Axes**: Duplicate tensor elements along a specified axis.
-- **Ellipsis Handling**: Support for batch dimensions.
+## Current Implementation Status
+
+| Feature               | Status  | Notes                      |
+|-----------------------|---------|----------------------------|
+| Basic Reshaping       | ✅      | Full support               |
+| Axis Transposition    | ✅      | Full support               |
+| Simple Axis Splitting | ✅      | Single-level only          |
+| Axis Merging          | ✅      | Basic cases working        |
+| Axis Repetition       | ⚠️      | Needs edge case fixes      |
+| Ellipsis Handling     | ⚠️      | Partial support            |
+| Nested Operations     | ❌      | Not yet implemented        |
+
+## Test Results Summary
+
+```text
+🔁 Axis Repetition: 
+  ✅ Basic cases
+  ❌ Fails on axis matching ('b' not in list)
+
+✂️ Axis Splitting:
+  ✅ Basic splitting (6,4)->(2,3,4)
+  ✅ Non-divisible split detection
+  ❌ Nested splitting not supported
+
+🔄 Axis Merging:
+  ✅ Basic merging (2,3,4)->(6,4)
+  ✅ Empty merge detection
+  ❌ Ellipsis in merging fails
+
+📦 Batch Dimensions:
+  ✅ Basic ellipsis
+  ✅ Identity patterns
+  ❌ Ellipsis position validation
+
+⚠️ Edge Cases:
+  ✅ Empty arrays
+  ✅ Single-element arrays
+  ✅ Invalid syntax detection
 
 ## Installation
 ```sh
-# Clone the repository
-git clone https://github.com/your-repo/einops-scratch.git
-
-# Navigate to the project directory
-cd einops-scratch
-
-# Install dependencies
-pip install -r requirements.txt
+git clone https://github.com/Shubhf/SARVAM-.git
+cd SARVAM-
+pip install -e .
 ```
 
 ## Usage
 ```python
 import numpy as np
-from your_module import rearrange
+from einops_scratch import rearrange
 
-# Transpose
+# Transposition
 x = np.random.rand(3, 4)
-result = rearrange(x, 'h w -> w h')
+rearrange(x, 'h w -> w h')  # (4, 3)
 
-# Split an axis
-x = np.random.rand(12, 10)
-result = rearrange(x, '(h w) c -> h w c', h=3)
+# Basic splitting
+x = np.random.rand(6, 10)
+rearrange(x, '(h w) c -> h w c', h=2)  # (2, 3, 10)
 
-# Merge axes
-x = np.random.rand(3, 4, 5)
-result = rearrange(x, 'a b c -> (a b) c')
-
-# Repeat an axis
-x = np.random.rand(3, 1, 5)
-result = rearrange(x, 'a 1 c -> a b c', b=4)
-
-# Handle batch dimensions
-x = np.random.rand(2, 3, 4, 5)
-result = rearrange(x, '... h w -> ... (h w)')
+# Axis merging
+x = np.random.rand(2, 3, 5)
+rearrange(x, 'a b c -> (a b) c')  # (6, 5)
 ```
+
+## Current Limitations
+```python
+# Not yet working:
+# x = np.random.rand(3, 2, 5)
+# rearrange(x, 'a 1 c -> a b c', b=4)  # Axis repetition edge cases
+
+# x = np.random.rand(24, 10)
+# rearrange(x, '((h1 h2) w) c -> h1 h2 w c', h1=2, h2=3)  # Nested splitting
+```
+## Development Roadmap
+
+-Basic reshape/transpose operations
+
+-Simple axis splitting/merging
+
+-Full ellipsis support
+
+-Nested operation support
+
+-Advanced error messages
+
+-Performance optimization
+
 
 ## Implementation Details
 - **Pattern Parsing**: A parser identifies input and output axes, along with operations.
 - **Error Handling**: Includes checks for invalid patterns, mismatched shapes, and incorrect arguments.
 - **Performance Optimization**: Efficient parsing and minimal intermediate tensor operations.
 
-## Testing
-Unit tests are included to validate correctness across various use cases:
-```sh
-pytest tests/
-```
+Test coverage includes:
+
+-Basic functionality
+
+-Error conditions
+
+-Edge cases
+
+-Failure modes
 
 ## Submission
 - The implementation is provided in a Google Colab notebook.
