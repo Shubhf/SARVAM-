@@ -95,7 +95,7 @@ pip install -e .
   - Performance optimizations
 
 
-This structure keeps the implementation and testing separate while maintaining clear version control.
+
 
 ## Technical Architecture
 1.Pattern Parser
